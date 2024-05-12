@@ -11,7 +11,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/cms/project',
+      path: '/cms/project/create',
       component: CreateProjectView
     }
   ]

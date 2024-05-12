@@ -4,11 +4,14 @@ defineProps({
   placeholder: String,
   type: String
 })
+
+const model = defineModel()
 </script>
 
 <template>
   <input
-    class="block w-40 outline-none border border-x-transparent border-t-transparent border-b-black"
+    v-model="model"
+    class="block w-8/12 focus:scale-110 transition-all outline-none border border-x-transparent border-t-transparent border-b-black"
     :type="type"
     :placeholder="placeholder"
     :id="id"
