@@ -1,6 +1,13 @@
-<template>
+'../../index.html', './src/**/*.{vue,js,ts,jsx,tsx}'<template>
   <div class="flex justify-center items-center h-screen">
     <div class="w-10/12">
+      <div class="flex">
+        <InputText type="text" placeholder="Your Skills" v-model="inputSkill" />
+        <ButtonPrimary class="ml-16" type="button" text="Add" @event="handleSkill()"/>
+      </div>
+      <div class="flex flex-wrap w-10/12">
+        <ButtonPrimary @event="deleteSkill" ref="refSkills" class="my-2 mx-1" v-for="(input, index) in inputSkills" :key="index" :id="'skill' + index" :text="input"></ButtonPrimary>
+      </div>
       <InputText
         class="mt-5"
         id="title"
@@ -35,10 +42,25 @@ import ButtonPrimary from '@/components/button/ButtonPrimary.vue'
 import axios from 'axios'
 import { ref } from 'vue'
 
+const inputSkills = ref([])
+const refSkills = ref(null)
+
+const inputSkill = ref('')
 const inputTitle = ref('')
 const inputDesc = ref('')
 const inputSource = ref('')
 const inputFile = ref(null)
+
+const handleSkill = () => {
+  if(inputSkill.value){
+    inputSkills.value.push(inputSkill.value)
+    inputSkill.value = ''
+  }
+}
+
+function deleteSkill(ref) {
+  ref.remove()
+}
 
 const handleFile = (value) => {
   inputFile.value = value
@@ -46,7 +68,7 @@ const handleFile = (value) => {
 
 async function createProject() {
   const data = new FormData()
-  data.append('skills', 'Ntar Yah, susah ini.')
+  data.append('skills', inputSkills.value)
   data.append('title', inputTitle.value)
   data.append('description', inputDesc.value)
   data.append('img_url', inputFile.value)
