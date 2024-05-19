@@ -1,12 +1,25 @@
-'../../index.html', './src/**/*.{vue,js,ts,jsx,tsx}'<template>
+'../../index.html', './src/**/*.{vue,js,ts,jsx,tsx}'
+<template>
   <div class="flex justify-center items-center h-screen">
     <div class="w-10/12">
       <div class="flex">
-        <InputText type="text" placeholder="Your Skills" v-model="inputSkill" />
-        <ButtonPrimary class="ml-16" type="button" text="Add" @event="handleSkill()"/>
+        <InputText
+          type="text"
+          placeholder="Your Skills"
+          @change="handleSkill"
+          v-model="inputSkill"
+        />
+        <ButtonPrimary class="ml-16" type="button" text="Add" @event="handleSkill" />
       </div>
       <div class="flex flex-wrap w-10/12">
-        <ButtonPrimary @event="deleteSkill" ref="refSkills" class="my-2 mx-1" v-for="(input, index) in inputSkills" :key="index" :id="'skill' + index" :text="input"></ButtonPrimary>
+        <ButtonPrimary
+          @event="deleteSkill"
+          class="my-2 mx-1"
+          v-for="(input, index) in inputSkills"
+          :key="index.toString()"
+          :id="index"
+          :text="input"
+        ></ButtonPrimary>
       </div>
       <InputText
         class="mt-5"
@@ -43,7 +56,6 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 const inputSkills = ref([])
-const refSkills = ref(null)
 
 const inputSkill = ref('')
 const inputTitle = ref('')
@@ -52,14 +64,14 @@ const inputSource = ref('')
 const inputFile = ref(null)
 
 const handleSkill = () => {
-  if(inputSkill.value){
+  if (inputSkill.value) {
     inputSkills.value.push(inputSkill.value)
     inputSkill.value = ''
   }
 }
 
 function deleteSkill(ref) {
-  ref.remove()
+  inputSkills.value.splice(ref.id, 1)
 }
 
 const handleFile = (value) => {
