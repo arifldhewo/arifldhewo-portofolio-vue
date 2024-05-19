@@ -22,7 +22,16 @@
         v-model="inputSource"
       />
       <InputFile id="img_url" @passing-file="handleFile" />
-      <ButtonPrimary class="mt-5" @event="createProject" text="Submit" type="submit" />
+      <div v-for="data in store.count" :key="data">
+        <InputText :id="('skills', data)" />
+      </div>
+      <ButtonPrimary
+        :is-loading="isLoading"
+        class="mt-5"
+        @event="createProject"
+        text="Submit"
+        type="submit"
+      />
     </div>
   </div>
 </template>
@@ -34,17 +43,24 @@ import TextArea from '@/components/input/TextAreaComponent.vue'
 import ButtonPrimary from '@/components/button/ButtonPrimary.vue'
 import axios from 'axios'
 import { ref } from 'vue'
+import { useCounterStore } from '@/stores/counter'
+
+const store = useCounterStore()
 
 const inputTitle = ref('')
 const inputDesc = ref('')
 const inputSource = ref('')
 const inputFile = ref(null)
+let isLoading = ref(false)
+
+const loop = ref(2)
 
 const handleFile = (value) => {
   inputFile.value = value
 }
 
 async function createProject() {
+  isLoading.value = true
   const data = new FormData()
   data.append('skills', 'Ntar Yah, susah ini.')
   data.append('title', inputTitle.value)
@@ -61,10 +77,13 @@ async function createProject() {
     }
   })
     .then((res) => {
-      console.log(res)
+      inputTitle.value = ''
+      inputDesc.value = ''
+      inputSource.value = ''
     })
     .catch((res) => {
-      console.error(res)
+      //
     })
+  isLoading.value = false
 }
 </script>
