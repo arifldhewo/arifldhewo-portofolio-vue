@@ -1,6 +1,25 @@
 <template>
   <div class="flex justify-center items-center h-screen">
     <div class="w-10/12">
+      <div class="flex">
+        <InputText
+          type="text"
+          placeholder="Your Skills"
+          @change="handleSkill"
+          v-model="inputSkill"
+        />
+        <ButtonPrimary class="ml-16" type="button" text="Add" @event="handleSkill" />
+      </div>
+      <div class="flex flex-wrap w-10/12">
+        <ButtonPrimary
+          @event="deleteSkill"
+          class="my-2 mx-1"
+          v-for="(input, index) in inputSkills"
+          :key="index.toString()"
+          :id="index"
+          :text="input"
+        ></ButtonPrimary>
+      </div>
       <InputText
         class="mt-5"
         id="title"
@@ -22,9 +41,6 @@
         v-model="inputSource"
       />
       <InputFile id="img_url" @passing-file="handleFile" />
-      <div v-for="data in store.count" :key="data">
-        <InputText :id="('skills', data)" />
-      </div>
       <ButtonPrimary
         :is-loading="isLoading"
         class="mt-5"
@@ -47,13 +63,25 @@ import { useCounterStore } from '@/stores/counter'
 
 const store = useCounterStore()
 
+const inputSkills = ref([])
+
+const inputSkill = ref('')
 const inputTitle = ref('')
 const inputDesc = ref('')
 const inputSource = ref('')
 const inputFile = ref(null)
 let isLoading = ref(false)
 
-const loop = ref(2)
+const handleSkill = () => {
+  if (inputSkill.value) {
+    inputSkills.value.push(inputSkill.value)
+    inputSkill.value = ''
+  }
+}
+
+function deleteSkill(ref) {
+  inputSkills.value.splice(ref.id, 1)
+}
 
 const handleFile = (value) => {
   inputFile.value = value
@@ -62,7 +90,7 @@ const handleFile = (value) => {
 async function createProject() {
   isLoading.value = true
   const data = new FormData()
-  data.append('skills', 'Ntar Yah, susah ini.')
+  data.append('skills', inputSkills.value)
   data.append('title', inputTitle.value)
   data.append('description', inputDesc.value)
   data.append('img_url', inputFile.value)
@@ -80,6 +108,7 @@ async function createProject() {
       inputTitle.value = ''
       inputDesc.value = ''
       inputSource.value = ''
+      inputSkills.value = []
     })
     .catch((res) => {
       //
