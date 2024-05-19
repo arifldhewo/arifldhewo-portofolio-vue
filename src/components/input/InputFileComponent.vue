@@ -18,7 +18,7 @@ function fileChange(event) {
 
     isUploaded.value = true
 
-    emit('passing-file', event.target.files[0])
+    emit('passing-file', event.target.files)
   }
 }
 </script>
@@ -35,7 +35,7 @@ function fileChange(event) {
         <img class="w-96" v-show="isUploaded" :src="filePreview" alt="your_image" />
         <p class="text-center" v-show="isUploaded">{{ fileString }}</p>
       </div>
-      <input :id="id" type="file" class="hidden" @change="fileChange" />
+      <input :id="id" type="file" class="hidden" @change="fileChange" multiple />
     </label>
   </div>
 </template>

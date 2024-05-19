@@ -79,12 +79,12 @@ const handleSkill = () => {
   }
 }
 
-function deleteSkill(ref) {
-  inputSkills.value.splice(ref.id, 1)
-}
-
 const handleFile = (value) => {
   inputFile.value = value
+}
+
+function deleteSkill(ref) {
+  inputSkills.value.splice(ref.id, 1)
 }
 
 async function createProject() {
@@ -93,7 +93,9 @@ async function createProject() {
   data.append('skills', inputSkills.value)
   data.append('title', inputTitle.value)
   data.append('description', inputDesc.value)
-  data.append('img_url', inputFile.value)
+  for (let i = 0; i < inputFile.value.length; i++) {
+    data.append(`img_url[${i}]`, inputFile.value[i])
+  }
   data.append('source', inputSource.value)
 
   await axios('/cms/project', {
@@ -109,9 +111,10 @@ async function createProject() {
       inputDesc.value = ''
       inputSource.value = ''
       inputSkills.value = []
+      console.log(res)
     })
     .catch((res) => {
-      //
+      console.error(res)
     })
   isLoading.value = false
 }
