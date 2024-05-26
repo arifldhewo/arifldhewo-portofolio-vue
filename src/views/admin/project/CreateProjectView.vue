@@ -101,7 +101,7 @@ async function createProject() {
   await axios('/cms/project', {
     data: data,
     method: 'post',
-    baseURL: import.meta.env.VITE_LOCAL_SERVER,
+    baseURL: import.meta.env.VITE_PROD_SERVER,
     headers: {
       'Content-Type': 'multipart/form-data'
     }
